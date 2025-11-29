@@ -29,7 +29,7 @@ const Sidebar: React.FC = () => {
       padding: '1.5rem'
     }}>
       <div style={{ marginBottom: '3rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-        <div style={{ width: '32px', height: '32px', background: '#667eea', borderRadius: '8px' }}></div>
+        <img src='../../public/logokinhelp2.png'  style={{ width: '50px', height: '50px', borderRadius: '8px' }} />
         <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700 }}>Kinhelp Admin</h2>
       </div>
 
