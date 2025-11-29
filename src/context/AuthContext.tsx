@@ -32,6 +32,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsAuthenticated(true);
     }
     setIsLoading(false);
+
+    // Listen for storage changes (e.g., when interceptor clears token)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'admin_token' && !e.newValue) {
+        // Token was removed
+        setUser(null);
+        setIsAuthenticated(false);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   const login = async (email: string, password: string) => {

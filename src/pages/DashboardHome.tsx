@@ -1,27 +1,59 @@
 import React, { useEffect, useState } from 'react';
 import { FaBox, FaCalendarCheck, FaStar, FaTools, FaUsers, FaUserTie } from 'react-icons/fa';
+import BookingsTimelineChart from '../components/charts/BookingsTimelineChart';
+import CategoryDistributionChart from '../components/charts/CategoryDistributionChart';
+import PopularServicesChart from '../components/charts/PopularServicesChart';
+import UserRegistrationsChart from '../components/charts/UserRegistrationsChart';
 import { adminService, type DashboardStats } from '../services/admin.service';
 
 const DashboardHome: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [bookingsTimeline, setBookingsTimeline] = useState<any[]>([]);
+  const [popularServices, setPopularServices] = useState<any[]>([]);
+  const [categoryDistribution, setCategoryDistribution] = useState<any[]>([]);
+  const [userRegistrations, setUserRegistrations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadStats();
+    loadData();
   }, []);
 
-  const loadStats = async () => {
+  const loadData = async () => {
     try {
-      const data = await adminService.getDashboardStats();
-      setStats(data);
+      const [statsData, timeline, services, categories, registrations] = await Promise.all([
+        adminService.getDashboardStats(),
+        adminService.getBookingsTimeline(),
+        adminService.getPopularServices(),
+        adminService.getServicesByCategory(),
+        adminService.getUserRegistrations(),
+      ]);
+      
+      setStats(statsData);
+      setBookingsTimeline(timeline);
+      setPopularServices(services);
+      setCategoryDistribution(categories);
+      setUserRegistrations(registrations);
     } catch (error) {
-      console.error('Erreur chargement stats', error);
+      console.error('Erreur chargement données', error);
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) return <div>Chargement...</div>;
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        fontSize: '1.25rem',
+        color: '#718096'
+      }}>
+        Chargement du dashboard...
+      </div>
+    );
+  }
 
   const cards = [
     { label: 'Total Utilisateurs', value: stats?.totalUsers, icon: <FaUsers />, color: '#667eea' },
@@ -34,9 +66,12 @@ const DashboardHome: React.FC = () => {
 
   return (
     <div>
-      <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#1a202c', marginBottom: '2rem' }}>Tableau de Bord</h1>
+      <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#1a202c', marginBottom: '2rem' }}>
+        Tableau de Bord
+      </h1>
       
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
+      {/* Stats Cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
         {cards.map((card, index) => (
           <div key={index} style={{
             background: 'white',
@@ -66,6 +101,14 @@ const DashboardHome: React.FC = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Charts Section */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '1.5rem' }}>
+        <BookingsTimelineChart data={bookingsTimeline} />
+        <UserRegistrationsChart data={userRegistrations} />
+        <PopularServicesChart data={popularServices} />
+        <CategoryDistributionChart data={categoryDistribution} />
       </div>
     </div>
   );

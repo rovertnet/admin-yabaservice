@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaCalendarAlt, FaChartBar, FaSignOutAlt, FaStar, FaTools, FaUsers } from 'react-icons/fa';
+import { FaBox, FaCalendarAlt, FaChartBar, FaSignOutAlt, FaStar, FaTools, FaUsers } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -10,6 +10,7 @@ const Sidebar: React.FC = () => {
     { path: '/', icon: <FaChartBar />, label: 'Dashboard' },
     { path: '/users', icon: <FaUsers />, label: 'Utilisateurs' },
     { path: '/providers', icon: <FaTools />, label: 'Prestataires' },
+    { path: '/services', icon: <FaBox />, label: 'Services' },
     { path: '/bookings', icon: <FaCalendarAlt />, label: 'Réservations' },
     { path: '/subscriptions', icon: <FaStar />, label: 'Abonnements' },
   ];

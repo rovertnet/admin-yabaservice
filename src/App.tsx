@@ -7,6 +7,7 @@ import BookingsPage from './pages/BookingsPage';
 import DashboardHome from './pages/DashboardHome';
 import LoginPage from './pages/LoginPage';
 import ProvidersPage from './pages/ProvidersPage';
+import ServicesPage from './pages/ServicesPage';
 import SubscriptionsPage from './pages/SubscriptionsPage';
 import UsersPage from './pages/UsersPage';
 
@@ -26,6 +27,7 @@ function App() {
             <Route index element={<DashboardHome />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="providers" element={<ProvidersPage />} />
+            <Route path="services" element={<ServicesPage />} />
             <Route path="bookings" element={<BookingsPage />} />
             <Route path="subscriptions" element={<SubscriptionsPage />} />
           </Route>
